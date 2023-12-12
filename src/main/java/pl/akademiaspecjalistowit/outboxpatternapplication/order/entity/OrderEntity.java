@@ -24,11 +24,10 @@ import lombok.NoArgsConstructor;
 public class OrderEntity {
 
     public OrderEntity(UUID technicalId,
-                       AmountEntity amount,
-                       PaymentStatus paymentStatus) {
+                       AmountEntity amount) {
         this.technicalId = technicalId;
         this.amount = amount;
-        this.paymentStatus = paymentStatus;
+        this.paymentStatus = PaymentStatus.PENDING;
         this.creationDate = LocalDateTime.now();
     }
 

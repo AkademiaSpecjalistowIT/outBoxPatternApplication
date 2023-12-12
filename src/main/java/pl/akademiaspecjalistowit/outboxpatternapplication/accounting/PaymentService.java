@@ -10,7 +10,7 @@ public class PaymentService {
 
     @SneakyThrows
     public PaymentStatus pay(UUID oderTechnicalId, AmountDto amountDto) {
-        Thread.sleep(1500);
+        Thread.sleep(3500);
         return PaymentStatus.COMPLETED;
     }
 }

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jobrunr.scheduling.JobScheduler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.akademiaspecjalistowit.outboxpatternapplication.accounting.PaymentService;
@@ -18,35 +19,35 @@ import pl.akademiaspecjalistowit.outboxpatternapplication.order.entity.OrderEnti
 @AllArgsConstructor
 class OrderServiceImpl implements OrderService {
 
-    private final PaymentService paymentService;
     private final OrderRepository orderRepository;
+    private final OrderInstallmentService orderInstallmentService;
+    private final JobScheduler jobScheduler;
+
 
     @Transactional
     public OrderResponse placeAnOrder(OrderDto orderDto) {
         validateOrder(orderDto);
 
-        UUID orderTechnicalId = UUID.randomUUID();
+        OrderEntity orderEntity = registerAnOrder(orderDto);
+        jobScheduler.enqueue(() -> orderInstallmentService.makeInstallmentForOrder(orderEntity.getId()));
 
-        PaymentStatus paymentStatus = paymentService
-            .pay(orderTechnicalId, orderDto.amount());
-
-        OrderEntity orderEntity = registerAnOrder(orderDto, paymentStatus, orderTechnicalId);
         log.info("new order {} saved successfully", orderEntity);
-        return new OrderResponse(orderEntity.getTechnicalId(), orderEntity.getCreationDate());
+        return new OrderResponse(orderEntity.getTechnicalId(),
+            orderEntity.getPaymentStatus(),
+            orderEntity.getCreationDate());
     }
+
 
     private void validateOrder(OrderDto orderDto) {
         //TODO implementation
     }
 
-    private OrderEntity registerAnOrder(OrderDto orderDto,
-                                        PaymentStatus paymentStatus, UUID orderTechnicalId) {
+    private OrderEntity registerAnOrder(OrderDto orderDto) {
         return orderRepository.save(new OrderEntity(
-            orderTechnicalId,
+            UUID.randomUUID(),
             new AmountEntity(new BigDecimal(
                 orderDto.amount().value()),
-                orderDto.amount().currency()),
-            OrderEntity.PaymentStatus.valueOf(paymentStatus.toString())
-        ));
+                orderDto.amount().currency()))
+        );
     }
 }

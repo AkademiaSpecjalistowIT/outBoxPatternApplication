@@ -28,7 +28,7 @@ public class OrderController {
     }
 
     @PostMapping("/multi")
-    @Transactional(timeout = 3)
+//    @Transactional(timeout = 3)
     public List<OrderResponse> placeAnOrders(@RequestBody List<OrderDto> orderDtos) {
         log.info("New orders {} received", orderDtos);
         return orderDtos.stream().map(orderService::placeAnOrder).toList();

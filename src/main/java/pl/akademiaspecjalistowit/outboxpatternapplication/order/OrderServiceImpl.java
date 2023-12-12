@@ -29,8 +29,7 @@ class OrderServiceImpl implements OrderService {
         validateOrder(orderDto);
 
         OrderEntity orderEntity = registerAnOrder(orderDto);
-        jobScheduler.enqueue(() -> orderInstallmentService.makeInstallmentForOrder(orderEntity.getId()));
-
+        orderInstallmentService.makeInstallmentForOrder(orderEntity.getId());
         log.info("new order {} saved successfully", orderEntity);
         return new OrderResponse(orderEntity.getTechnicalId(),
             orderEntity.getPaymentStatus(),

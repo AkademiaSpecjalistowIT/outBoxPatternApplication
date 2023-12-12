@@ -2,6 +2,7 @@ package pl.akademiaspecjalistowit.outboxpatternapplication.accounting;
 
 import java.util.UUID;
 import lombok.SneakyThrows;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import pl.akademiaspecjalistowit.outboxpatternapplication.order.dto.AmountDto;
 

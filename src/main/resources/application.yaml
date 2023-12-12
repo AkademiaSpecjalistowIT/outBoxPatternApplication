@@ -1,7 +1,7 @@
 server:
   tomcat:
     connection-timeout: 100
-  port: 8081
+  port: 8082
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5436/postgres
@@ -17,9 +17,9 @@ spring:
   liquibase:
     change-log: db/changelog/db.changelog-master.yaml
 org.jobrunr:
-  dashboard:
-    enabled: true
-    port: 8000
+#  dashboard:
+#    enabled: true
+#    port: 8000
   background-job-server:
     enabled: true
     poll-interval-in-seconds: 5

@@ -2,6 +2,7 @@ package pl.akademiaspecjalistowit.outboxpatternapplication.order;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.akademiaspecjalistowit.outboxpatternapplication.accounting.PaymentService;
@@ -18,6 +19,7 @@ public class OrderInstallmentService {
 
 
     @Transactional
+    @Async
     public void makeInstallmentForOrder(Long orderId) {
         orderRepository.findById(orderId)
             .ifPresent(orderEntity -> {

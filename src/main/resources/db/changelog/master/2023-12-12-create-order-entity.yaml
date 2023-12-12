@@ -1,0 +1,40 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-order-table
+      author: Przemysław Gęsieniec
+      changes:
+        - createTable:
+            tableName: orders
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: technical_id
+                  type: uuid
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: amount_value
+                  type: decimal(19,2)
+              - column:
+                  name: amount_currency
+                  type: varchar(3)
+              - column:
+                  name: payment_status
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: creation_date
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: update_date
+                  type: timestamp
